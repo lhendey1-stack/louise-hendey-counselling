@@ -65,7 +65,6 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
   };
   return (
     <>
-      <div className="review-bar"><span>Private review build</span><Link href="/build-notes/">View Louise’s confirmation checklist</Link></div>
       <header className="site-header">
         <div className="header-inner">
           <Link className="brand" href="/" aria-label="Louise Hendey home">

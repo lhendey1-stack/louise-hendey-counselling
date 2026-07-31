@@ -25,7 +25,6 @@ export const metadata: Metadata = {
     images: [{ url: "/images/louise-hendey-therapy-room.png", alt: "Louise Hendey's calm private therapy room" }],
   },
   icons: { icon: "/favicon.svg", shortcut: "/favicon.svg" },
-  other: { "codex-preview": "private-review" },
 };
 
 const structuredData = {
