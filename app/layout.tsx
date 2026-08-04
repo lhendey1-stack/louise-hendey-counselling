@@ -7,7 +7,7 @@ const lora = Lora({ variable: "--font-heading", subsets: ["latin"], display: "sw
 const nunito = Nunito_Sans({ variable: "--font-body", subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.louisehendeycounsellingandtherapy.com"),
+  metadataBase: new URL("https://louisehendeycounsellingandtherapy.com"),
   title: {
     default: "Counsellor in Mottingham & Online | Louise Hendey",
     template: "%s",
@@ -24,7 +24,16 @@ export const metadata: Metadata = {
       "Warm, confidential counselling for adults in Mottingham and South East London, plus online sessions across the UK.",
     images: [{ url: "/images/louise-hendey-therapy-room.png", alt: "Louise Hendey's calm private therapy room" }],
   },
-  icons: { icon: "/favicon.svg", shortcut: "/favicon.svg" },
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+  },
+  manifest: "/site.webmanifest",
 };
 
 const structuredData = {
@@ -32,12 +41,12 @@ const structuredData = {
   "@graph": [
     {
       "@type": "Organization",
-      "@id": "https://www.louisehendeycounsellingandtherapy.com/#organisation",
+      "@id": "https://louisehendeycounsellingandtherapy.com/#organisation",
       name: "Louise Hendey Counselling and Therapy",
-      url: "https://www.louisehendeycounsellingandtherapy.com/",
+      url: "https://louisehendeycounsellingandtherapy.com/",
       telephone: "+447909578954",
       email: "therapy@louisehendeycounsellingandtherapy.com",
-      logo: "https://www.louisehendeycounsellingandtherapy.com/favicon.svg",
+      logo: "https://louisehendeycounsellingandtherapy.com/favicon.svg",
       sameAs: [
         "https://www.counselling-directory.org.uk/counsellors/louise-hendey",
         "https://www.bacp.co.uk/therapists/419515/louise-hendey/mottingham-se9",
@@ -46,12 +55,12 @@ const structuredData = {
     },
     {
       "@type": "Person",
-      "@id": "https://www.louisehendeycounsellingandtherapy.com/#louise",
+      "@id": "https://louisehendeycounsellingandtherapy.com/#louise",
       name: "Louise Hendey",
       jobTitle: "Counsellor",
       telephone: "+447909578954",
       email: "therapy@louisehendeycounsellingandtherapy.com",
-      worksFor: { "@id": "https://www.louisehendeycounsellingandtherapy.com/#organisation" },
+      worksFor: { "@id": "https://louisehendeycounsellingandtherapy.com/#organisation" },
       memberOf: [
         { "@type": "Organization", name: "British Association for Counselling and Psychotherapy" },
         { "@type": "Organization", name: "National Counselling and Psychotherapy Society" },
