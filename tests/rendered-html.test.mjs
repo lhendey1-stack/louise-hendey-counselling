@@ -40,10 +40,34 @@ test("includes the portable Web3Forms integration", async () => {
   const contactForm = await readFile(new URL("../app/components/ContactForm.tsx", import.meta.url), "utf8");
 
   assert.match(contactForm, /https:\/\/api\.web3forms\.com\/submit/);
-  assert.match(contactForm, /08036a90-a791-41c6-881b-91ae46069e36/);
+  assert.match(contactForm, /WEB3FORMS_ACCESS_KEY/);
   assert.match(contactForm, /name="subject" value=\{WEB3FORMS_SUBJECT\}/);
   assert.match(contactForm, /formData\.set\("replyto"/);
   assert.match(contactForm, /name="botcheck"/);
   assert.match(contactForm, /Thank you\. Your message has been sent to Louise\. She aims to respond within 48 hours\./);
   assert.match(contactForm, /Sorry, your message could not be sent\. Please use the email address shown on the website or try again shortly\./);
+});
+
+test("redirects successful Web3Forms submissions on the current site origin", async () => {
+  const contactForm = await readFile(new URL("../app/components/ContactForm.tsx", import.meta.url), "utf8");
+
+  assert.match(contactForm, /const WEB3FORMS_SUCCESS_PATH = "\/contact\/\?sent=1"/);
+  assert.match(contactForm, /new URL\(WEB3FORMS_SUCCESS_PATH, window\.location\.origin\)/);
+  assert.match(contactForm, /window\.location\.assign\(successUrl\.href\)/);
+  assert.doesNotMatch(contactForm, /workers\.dev/);
+  assert.ok(contactForm.indexOf("if (!response.ok || !result.success)") < contactForm.indexOf("window.location.assign(successUrl.href)"));
+});
+
+test("uses the supplied photos in their requested page positions", async () => {
+  const home = await readFile(new URL("../app/page.tsx", import.meta.url), "utf8");
+  const about = await readFile(new URL("../app/about-louise/page.tsx", import.meta.url), "utf8");
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+
+  assert.match(home, /louise-hendey-therapy-room-empty\.webp/);
+  assert.match(home, /louise-hendey-therapy-room-overlay\.webp/);
+  assert.match(home, /louise-hendey-portrait-blue\.webp/);
+  assert.match(about, /louise-hendey-seated-therapy-room\.webp/);
+  assert.match(about, /louise-hendey-therapy-room-empty\.webp/);
+  assert.match(css, /\.portrait-card\{[^}]*height:150px;[^}]*width:150px\}/);
+  assert.match(css, /@media\(max-width:680px\)\{[\s\S]*?\.portrait-card\{height:110px;width:110px\}/);
 });
