@@ -48,6 +48,16 @@ test("includes the portable Web3Forms integration", async () => {
   assert.match(contactForm, /Sorry, your message could not be sent\. Please use the email address shown on the website or try again shortly\./);
 });
 
+test("redirects successful Web3Forms submissions on the current site origin", async () => {
+  const contactForm = await readFile(new URL("../app/components/ContactForm.tsx", import.meta.url), "utf8");
+
+  assert.match(contactForm, /const WEB3FORMS_SUCCESS_PATH = "\/contact\/\?sent=1"/);
+  assert.match(contactForm, /new URL\(WEB3FORMS_SUCCESS_PATH, window\.location\.origin\)/);
+  assert.match(contactForm, /window\.location\.assign\(successUrl\.href\)/);
+  assert.doesNotMatch(contactForm, /workers\.dev/);
+  assert.ok(contactForm.indexOf("if (!response.ok || !result.success)") < contactForm.indexOf("window.location.assign(successUrl.href)"));
+});
+
 test("uses the supplied photos in their requested page positions", async () => {
   const home = await readFile(new URL("../app/page.tsx", import.meta.url), "utf8");
   const about = await readFile(new URL("../app/about-louise/page.tsx", import.meta.url), "utf8");
