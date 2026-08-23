@@ -26,7 +26,7 @@ const images = [
 ];
 const launch = [
   ["Contact form","Visual preview and validation are complete. Secure email delivery, spam protection, processor agreement and retention rules must be selected and tested before launch."],
-  ["Cookies and tracking","The consent interface is shown, but GA4 G-LT3B6453LM and Clarity xd6y8c3s9n are not loaded. Add them only after consent blocking and privacy wording are verified."],
+  ["Cookies and tracking","GA4 G-LT3B6453LM and Clarity y6vtzo8z9z load only after the visitor accepts optional analytics. Rejecting optional analytics leaves both trackers unloaded."],
   ["Legal review","Privacy notice, professional information and accessibility pages are structured placeholders. Replace with facts matched to Louise’s real systems and review before launch."],
   ["Redirects","If the domain moves, set 301 redirects for /counselling/, /about-me/, /fees/, /faq/ and the current /contact/ route where needed."],
   ["Domain and search","Do not connect the domain yet. Later: preserve Search Console, submit the new sitemap, verify canonical URLs and test the live contact journey."],

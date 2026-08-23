@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { TRACKING_CONSENT_EVENT, TRACKING_CONSENT_KEY } from "./SiteTracking";
 
 const navigation = [
   { href: "/", label: "Home" },
@@ -20,7 +21,8 @@ function CookiePanel({ open, onClose }: { open: boolean; onClose: () => void }) 
   const [analytics, setAnalytics] = useState(false);
   if (!open) return null;
   const save = (allow: boolean) => {
-    localStorage.setItem("lh-cookie-choice", allow ? "analytics" : "necessary");
+    localStorage.setItem(TRACKING_CONSENT_KEY, allow ? "analytics" : "necessary");
+    window.dispatchEvent(new CustomEvent(TRACKING_CONSENT_EVENT, { detail: allow }));
     onClose();
   };
   return (
@@ -28,14 +30,14 @@ function CookiePanel({ open, onClose }: { open: boolean; onClose: () => void }) 
       <section className="cookie-panel" role="dialog" aria-modal="true" aria-labelledby="cookie-title">
         <p className="eyebrow">Your privacy</p>
         <h2 id="cookie-title">Cookie settings</h2>
-        <p>This private preview does not load Google Analytics or Microsoft Clarity. These controls show how consent will work before a public launch.</p>
+        <p>Google Analytics and Microsoft Clarity load only if you allow optional analytics.</p>
         <label className="cookie-toggle">
           <input type="checkbox" checked disabled />
           <span><strong>Necessary cookies</strong><small>Required for core site features and saved preferences.</small></span>
         </label>
         <label className="cookie-toggle">
           <input type="checkbox" checked={analytics} onChange={(e) => setAnalytics(e.target.checked)} />
-          <span><strong>Optional analytics</strong><small>Off in this preview. These must never load before consent.</small></span>
+          <span><strong>Optional analytics</strong><small>Used to understand visits and improve the website. Off until you consent.</small></span>
         </label>
         <div className="cookie-actions">
           <button className="button button-primary" onClick={() => save(true)}>Accept</button>
@@ -54,13 +56,14 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
   const [showBanner, setShowBanner] = useState(false);
   useEffect(() => {
     const timer = window.setTimeout(
-      () => setShowBanner(!localStorage.getItem("lh-cookie-choice")),
+      () => setShowBanner(!localStorage.getItem(TRACKING_CONSENT_KEY)),
       0,
     );
     return () => window.clearTimeout(timer);
   }, []);
   const choose = (choice: "analytics" | "necessary") => {
-    localStorage.setItem("lh-cookie-choice", choice);
+    localStorage.setItem(TRACKING_CONSENT_KEY, choice);
+    window.dispatchEvent(new CustomEvent(TRACKING_CONSENT_EVENT, { detail: choice === "analytics" }));
     setShowBanner(false);
   };
   return (
@@ -101,7 +104,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
         </div>
       </footer>
       <nav className="mobile-actions" aria-label="Quick contact"><a href="tel:+447909578954">Call</a><Link href="/contact/#free-call">Book free call</Link></nav>
-      {showBanner && <section className="cookie-banner" aria-label="Cookie choices" aria-live="polite"><div><strong>Your privacy matters</strong><p>This preview uses necessary storage only. Optional analytics are switched off.</p></div><div className="cookie-actions"><button className="button button-primary" onClick={() => choose("analytics")}>Accept</button><button className="button button-outline" onClick={() => choose("necessary")}>Reject non-essential</button><button className="text-button" onClick={() => setCookieOpen(true)}>Manage settings</button></div></section>}
+      {showBanner && <section className="cookie-banner" aria-label="Cookie choices" aria-live="polite"><div><strong>Your privacy matters</strong><p>Optional analytics stay off unless you accept them.</p></div><div className="cookie-actions"><button className="button button-primary" onClick={() => choose("analytics")}>Accept</button><button className="button button-outline" onClick={() => choose("necessary")}>Reject non-essential</button><button className="text-button" onClick={() => setCookieOpen(true)}>Manage settings</button></div></section>}
       <CookiePanel open={cookieOpen} onClose={() => setCookieOpen(false)} />
     </>
   );

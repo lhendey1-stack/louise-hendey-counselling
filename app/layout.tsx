@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Lora, Nunito_Sans } from "next/font/google";
 import { SiteShell } from "./components/SiteShell";
+import { SiteTracking } from "./components/SiteTracking";
 import "./globals.css";
 
 const lora = Lora({ variable: "--font-heading", subsets: ["latin"], display: "swap" });
@@ -78,6 +79,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en-GB">
       <body className={`${lora.variable} ${nunito.variable}`}>
+        <SiteTracking />
         <a className="skip-link" href="#main-content">Skip to main content</a>
         <SiteShell>{children}</SiteShell>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />

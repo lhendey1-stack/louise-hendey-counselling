@@ -58,6 +58,33 @@ test("redirects successful Web3Forms submissions on the current site origin", as
   assert.ok(contactForm.indexOf("if (!response.ok || !result.success)") < contactForm.indexOf("window.location.assign(successUrl.href)"));
 });
 
+test("loads the approved trackers once and only after analytics consent", async () => {
+  const layout = await readFile(new URL("../app/layout.tsx", import.meta.url), "utf8");
+  const shell = await readFile(new URL("../app/components/SiteShell.tsx", import.meta.url), "utf8");
+  const tracking = await readFile(new URL("../app/components/SiteTracking.tsx", import.meta.url), "utf8");
+
+  assert.match(layout, /<SiteTracking \/>/);
+  assert.match(tracking, /const GA4_MEASUREMENT_ID = "G-LT3B6453LM"/);
+  assert.match(tracking, /const CLARITY_PROJECT_ID = "y6vtzo8z9z"/);
+  assert.match(tracking, /googletagmanager\.com\/gtag\/js\?id=\$\{GA4_MEASUREMENT_ID\}/);
+  assert.match(tracking, /clarity\.ms\/tag\/\$\{CLARITY_PROJECT_ID\}/);
+  assert.match(tracking, /script\[data-lh-tracker="ga4"\]/);
+  assert.match(tracking, /script\[data-lh-tracker="clarity"\]/);
+  assert.match(tracking, /localStorage\.getItem\(TRACKING_CONSENT_KEY\) === "analytics"/);
+  assert.match(shell, /new CustomEvent\(TRACKING_CONSENT_EVENT/);
+  assert.doesNotMatch(shell, /private preview|Off in this preview/i);
+});
+
+test("sends page views with the full successful-form route", async () => {
+  const tracking = await readFile(new URL("../app/components/SiteTracking.tsx", import.meta.url), "utf8");
+
+  assert.match(tracking, /"event", "page_view"/);
+  assert.match(tracking, /window\.location\.pathname\}\$\{window\.location\.search/);
+  assert.match(tracking, /page_location: window\.location\.href/);
+  assert.match(tracking, /send_page_view: false/);
+  assert.doesNotMatch(tracking, /"event", "generate_lead"/);
+});
+
 test("uses the supplied photos in their requested page positions", async () => {
   const home = await readFile(new URL("../app/page.tsx", import.meta.url), "utf8");
   const about = await readFile(new URL("../app/about-louise/page.tsx", import.meta.url), "utf8");
