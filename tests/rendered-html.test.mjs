@@ -61,10 +61,13 @@ test("redirects successful Web3Forms submissions on the current site origin", as
 test("uses the supplied photos in their requested page positions", async () => {
   const home = await readFile(new URL("../app/page.tsx", import.meta.url), "utf8");
   const about = await readFile(new URL("../app/about-louise/page.tsx", import.meta.url), "utf8");
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
 
   assert.match(home, /louise-hendey-therapy-room-empty\.webp/);
-  assert.match(home, /louise-hendey-headshot-front\.webp/);
-  assert.match(home, /louise-hendey-portrait-angled\.webp/);
+  assert.match(home, /louise-hendey-therapy-room-overlay\.webp/);
+  assert.match(home, /louise-hendey-portrait-blue\.webp/);
   assert.match(about, /louise-hendey-seated-therapy-room\.webp/);
   assert.match(about, /louise-hendey-therapy-room-empty\.webp/);
+  assert.match(css, /\.portrait-card\{[^}]*height:150px;[^}]*width:150px\}/);
+  assert.match(css, /@media\(max-width:680px\)\{[\s\S]*?\.portrait-card\{height:110px;width:110px\}/);
 });
