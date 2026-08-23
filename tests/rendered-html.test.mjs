@@ -40,10 +40,21 @@ test("includes the portable Web3Forms integration", async () => {
   const contactForm = await readFile(new URL("../app/components/ContactForm.tsx", import.meta.url), "utf8");
 
   assert.match(contactForm, /https:\/\/api\.web3forms\.com\/submit/);
-  assert.match(contactForm, /08036a90-a791-41c6-881b-91ae46069e36/);
+  assert.match(contactForm, /WEB3FORMS_ACCESS_KEY/);
   assert.match(contactForm, /name="subject" value=\{WEB3FORMS_SUBJECT\}/);
   assert.match(contactForm, /formData\.set\("replyto"/);
   assert.match(contactForm, /name="botcheck"/);
   assert.match(contactForm, /Thank you\. Your message has been sent to Louise\. She aims to respond within 48 hours\./);
   assert.match(contactForm, /Sorry, your message could not be sent\. Please use the email address shown on the website or try again shortly\./);
+});
+
+test("uses the supplied photos in their requested page positions", async () => {
+  const home = await readFile(new URL("../app/page.tsx", import.meta.url), "utf8");
+  const about = await readFile(new URL("../app/about-louise/page.tsx", import.meta.url), "utf8");
+
+  assert.match(home, /louise-hendey-therapy-room-empty\.webp/);
+  assert.match(home, /louise-hendey-headshot-front\.webp/);
+  assert.match(home, /louise-hendey-portrait-angled\.webp/);
+  assert.match(about, /louise-hendey-seated-therapy-room\.webp/);
+  assert.match(about, /louise-hendey-therapy-room-empty\.webp/);
 });
