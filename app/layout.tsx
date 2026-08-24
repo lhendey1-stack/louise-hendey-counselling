@@ -3,6 +3,7 @@ import { Lora, Nunito_Sans } from "next/font/google";
 import { SiteShell } from "./components/SiteShell";
 import { SiteTracking } from "./components/SiteTracking";
 import "./globals.css";
+import "./contact-success.css";
 
 const lora = Lora({ variable: "--font-heading", subsets: ["latin"], display: "swap" });
 const nunito = Nunito_Sans({ variable: "--font-body", subsets: ["latin"], display: "swap" });
