@@ -44,7 +44,7 @@ test("includes the portable Web3Forms integration", async () => {
   assert.match(contactForm, /name="subject" value=\{WEB3FORMS_SUBJECT\}/);
   assert.match(contactForm, /formData\.set\("replyto"/);
   assert.match(contactForm, /name="botcheck"/);
-  assert.match(contactForm, /Thank you\. Your message has been sent to Louise\. She aims to respond within 48 hours\./);
+  assert.match(contactForm, /Thanks, your message has been sent\.<br \/>Louise will aim to get back to you within 48 hours\./);
   assert.match(contactForm, /Sorry, your message could not be sent\. Please use the email address shown on the website or try again shortly\./);
 });
 
