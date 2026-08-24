@@ -1,18 +1,13 @@
 "use client";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 
 const WEB3FORMS_ENDPOINT = "https://api.web3forms.com/submit";
 const WEB3FORMS_SUCCESS_PATH = "/contact/?sent=1";
 const WEB3FORMS_ACCESS_KEY = "08036a90-a791-41c6-881b-91ae46069e36";
 const WEB3FORMS_SUBJECT = "New website enquiry for Louise Hendey Counselling and Therapy";
 
-export function ContactForm() {
-  const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
-
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get("sent") === "1") setStatus("success");
-  }, []);
+export function ContactForm({ initialSuccess = false }: { initialSuccess?: boolean }) {
+  const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">(initialSuccess ? "success" : "idle");
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
